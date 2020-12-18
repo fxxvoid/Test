@@ -18,12 +18,23 @@ func NewCache() *Cache {
 }
 
 func NewCacheWith(options Options) *Cache {
+	if cache, ok := recoverFromDumpFile(options.DumpFile); ok {
+		return cache
+	}
 	return &Cache{
 		data: make(map[string]*value, 256),
 		options: options,
 		status: newStatus(),
 		lock: &sync.RWMutex{},
 	}
+}
+
+func recoverFromDumpFile(dumpFile string) (*Cache, bool) {
+	cache, err := newEmptyDump().from(dumpFile)
+	if err != nil {
+		return nil, false
+	}
+	return cache, true
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
@@ -52,12 +63,12 @@ func (c *Cache) SetWithTTL(key string, value []byte, ttl int64) error {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 	if oldValue, ok := c.data[key]; ok {
-		c.status.subEntry(key, oldValue.data)
+		c.status.subEntry(key, oldValue.Data)
 	}
 
 	if !c.checkEntrySize(key, value) {
 		if oldValue, ok := c.data[key]; ok {
-			c.status.addEntry(key, oldValue.data)
+			c.status.addEntry(key, oldValue.Data)
 		}
 
 		return errors.New("the entry size will exceed if you set thie entry")
@@ -76,7 +87,7 @@ func (c *Cache) Delete(key string) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 	if oldValue, ok := c.data[key]; ok {
-		c.status.subEntry(key, oldValue.data)
+		c.status.subEntry(key, oldValue.Data)
 		delete(c.data, key)
 	}
 }
@@ -95,7 +106,7 @@ func (c *Cache) gc() {
 	count := 0
 	for key, value := range c.data {
 		if !value.alive() {
-			c.status.subEntry(key, value.data)
+			c.status.subEntry(key, value.Data)
 			delete(c.data, key)
 			count++
 			if count >= c.options.MaxGcCount {
@@ -116,3 +127,23 @@ func (c *Cache) AutoGc() {
 		}
 	}()
 }
+
+func (c *Cache) dump() error {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
+	return newDump(c).to(c.options.DumpFile)
+}
+
+func (c *Cache) AutoDump() {
+	go func() {
+		ticker := time.NewTicker(time.Duration(c.options.DumpDuration)*time.Minute)
+		for {
+			select {
+			case <- ticker.C:
+				c.dump()
+			}
+		}
+	}()
+}
+

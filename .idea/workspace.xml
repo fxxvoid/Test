@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2314bd9c-b899-4d25-bb5d-5d9137f3d311" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/caches/options.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/caches/status.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/caches/value.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/caches/dump.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/caches/cache.go" beforeDir="false" afterPath="$PROJECT_DIR$/caches/cache.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/caches/options.go" beforeDir="false" afterPath="$PROJECT_DIR$/caches/options.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/caches/value.go" beforeDir="false" afterPath="$PROJECT_DIR$/caches/value.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servers/http.go" beforeDir="false" afterPath="$PROJECT_DIR$/servers/http.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servers/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/servers/server.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
